@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tourist Guide</title>
+  <style>
+    * {
+      font-family: Arial, sans-serif;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 500px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .card {
+      flex: 1 1 45%;
+      background-color: #007bff;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      background-color: #0056b3;
+    }
+
+    .list-item {
+      background: #f9f9f9;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .back-btn {
+      margin-top: 10px;
+      background: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="mainContainer">
+    <!-- Step 1: Choose city -->
+    <div id="cityScreen">
+      <h2>Select a City</h2>
+      <select id="citySelect">
+        <option value="">-- Choose City --</option>
+        <option value="Dublin">Dublin</option>
+        <option value="Cork">Cork</option>
+        <option value="Limerick">Limerick</option>
+        <option value="Mumbai">Mumbai</option>
+      </select>
+      <button onclick="goToOptions()">Next</button>
+    </div>
+
+    <!-- Step 2: Show options like Food, Travel, Hotels -->
+    <div id="optionsScreen" style="display: none;">
+      <h2 id="cityTitle"></h2>
+      <div class="cards">
+        <div class="card" onclick="showInfo('hotels')">Hotels</div>
+        <div class="card" onclick="showInfo('travel')">Travel</div>
+        <div class="card" onclick="showInfo('food')">Food</div>
+      </div>
+      <button class="back-btn" onclick="goBackToCity()">Back</button>
+    </div>
+
+    <!-- Step 3: List data -->
+    <div id="listScreen" style="display: none;">
+      <h2 id="listTitle"></h2>
+      <div id="listContent"></div>
+      <button class="back-btn" onclick="goBackToOptions()">Back</button>
+    </div>
+  </div>
+
+  <script>
+    let selectedCity = '';
+
+    function goToOptions() {
+      const citySelect = document.getElementById("citySelect");
+      selectedCity = citySelect.value;
+
+      if (selectedCity === '') {
+        alert("Please select a city.");
+        return;
+      }
+
+      document.getElementById("cityScreen").style.display = "none";
+      document.getElementById("optionsScreen").style.display = "block";
+      document.getElementById("cityTitle").innerText = selectedCity + " - Choose an Option";
+    }
+
+    function goBackToCity() {
+      document.getElementById("optionsScreen").style.display = "none";
+      document.getElementById("cityScreen").style.display = "block";
+    }
+
+    function goBackToOptions() {
+      document.getElementById("listScreen").style.display = "none";
+      document.getElementById("optionsScreen").style.display = "block";
+    }
+
+    function showInfo(type) {
+      const list = document.getElementById("listContent");
+      list.innerHTML = "";
+
+      let items = [];
+
+      if (type === "hotels") {
+        document.getElementById("listTitle").innerText = "Hotels in " + selectedCity;
+        items = [
+          { name: "City Grand Hotel", desc: "Modern hotel with sea view", price: "€120/night" },
+          { name: "Comfort Stay", desc: "Budget-friendly with free breakfast", price: "€80/night" }
+        ];
+      } else if (type === "travel") {
+        document.getElementById("listTitle").innerText = "Tourist Spots in " + selectedCity;
+        items = [
+          { name: "Castle Tour", desc: "Historical site with guided tours" },
+          { name: "River Cruise", desc: "Relaxing boat experience around the city" }
+        ];
+      } else if (type === "food") {
+        document.getElementById("listTitle").innerText = "Famous Foods in " + selectedCity;
+        items = [
+          { name: "Fish & Chips", desc: "Classic Irish meal with tartar sauce" },
+          { name: "Boxty", desc: "Traditional Irish potato pancake" }
+        ];
+      }
+
+      items.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "list-item";
+        div.innerHTML = `<strong>${item.name}</strong><br>${item.desc}${item.price ? `<br><em>${item.price}</em>` : ''}`;
+        list.appendChild(div);
+      });
+
+      document.getElementById("optionsScreen").style.display = "none";
+      document.getElementById("listScreen").style.display = "block";
+    }
+  </script>
+</body>
+</html>
+
+
