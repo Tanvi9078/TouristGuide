@@ -6,14 +6,13 @@
   <title>Tourist Guide</title>
   <style>
     * {
-      font-family: Arial, sans-serif;
       box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
     }
 
     body {
       margin: 0;
-      padding: 0;
-      background-color: #f0f4f8;
+      background: linear-gradient(to right, #74ebd5, #acb6e5);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -24,159 +23,219 @@
       width: 90%;
       max-width: 500px;
       background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
     }
 
     h2 {
       text-align: center;
-      margin-bottom: 1rem;
-    }
-
-    select, button {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      font-size: 1rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    .cards {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
+      color: #333;
+      margin-bottom: 20px;
     }
 
     .card {
-      flex: 1 1 45%;
-      background-color: #007bff;
-      color: white;
-      padding: 20px;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      color: #fff;
+      padding: 15px;
+      margin: 10px 0;
       text-align: center;
-      border-radius: 8px;
+      border-radius: 12px;
       cursor: pointer;
+      font-size: 1.1rem;
+      transition: transform 0.2s ease, background 0.3s;
     }
 
     .card:hover {
-      background-color: #0056b3;
+      transform: scale(1.05);
+      background: linear-gradient(to right, #0072ff, #00c6ff);
     }
 
-    .list-item {
-      background: #f9f9f9;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
+    input, button {
+      width: 100%;
+      padding: 12px;
       margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    input {
+      background-color: #f3f4f6;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background: #28a745;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #218838;
+    }
+
+    .hidden {
+      display: none;
     }
 
     .back-btn {
+      background: #6c757d;
+      color: #fff;
+    }
+
+    .back-btn:hover {
+      background: #495057;
+    }
+
+    .toggle-link {
+      text-align: center;
+      color: #007bff;
+      cursor: pointer;
+      font-size: 0.9rem;
       margin-top: 10px;
-      background: #ccc;
+    }
+
+    .toggle-link:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <div class="container" id="mainContainer">
-    <!-- Step 1: Choose city -->
-    <div id="cityScreen">
-      <h2>Select a City</h2>
-      <select id="citySelect">
-        <option value="">-- Choose City --</option>
-        <option value="Dublin">Dublin</option>
-        <option value="Cork">Cork</option>
-        <option value="Limerick">Limerick</option>
-        <option value="Mumbai">Mumbai</option>
-      </select>
-      <button onclick="goToOptions()">Next</button>
-    </div>
 
-    <!-- Step 2: Show options like Food, Travel, Hotels -->
-    <div id="optionsScreen" style="display: none;">
-      <h2 id="cityTitle"></h2>
-      <div class="cards">
-        <div class="card" onclick="showInfo('hotels')">Hotels</div>
-        <div class="card" onclick="showInfo('travel')">Travel</div>
-        <div class="card" onclick="showInfo('food')">Food</div>
-      </div>
-      <button class="back-btn" onclick="goBackToCity()">Back</button>
-    </div>
-
-    <!-- Step 3: List data -->
-    <div id="listScreen" style="display: none;">
-      <h2 id="listTitle"></h2>
-      <div id="listContent"></div>
-      <button class="back-btn" onclick="goBackToOptions()">Back</button>
-    </div>
+<div class="container">
+  <!-- Login Screen -->
+  <div id="loginScreen">
+    <h2>Login</h2>
+    <input type="email" id="loginEmail" placeholder="Email" required />
+    <input type="password" id="loginPassword" placeholder="Password" required />
+    <button onclick="login()">Login</button>
+    <div class="toggle-link" onclick="toggleForm('register')">Don't have an account? Register</div>
   </div>
 
-  <script>
-    let selectedCity = '';
+  <!-- Register Screen -->
+  <div id="registerScreen" class="hidden">
+    <h2>Register</h2>
+    <input type="text" id="regName" placeholder="Full Name" required />
+    <input type="email" id="regEmail" placeholder="Email" required />
+    <input type="password" id="regPassword" placeholder="Password" required />
+    <button onclick="register()">Register</button>
+    <div class="toggle-link" onclick="toggleForm('login')">Already have an account? Login</div>
+  </div>
 
-    function goToOptions() {
-      const citySelect = document.getElementById("citySelect");
-      selectedCity = citySelect.value;
+  <!-- City Selection -->
+  <div id="cityScreen" class="hidden">
+    <h2>Select a City</h2>
+    <div class="card" onclick="selectCity('Dublin')">🏙️ Dublin</div>
+    <div class="card" onclick="selectCity('Cork')">🌉 Cork</div>
+    <div class="card" onclick="selectCity('Limerick')">🏞️ Limerick</div>
+  </div>
 
-      if (selectedCity === '') {
-        alert("Please select a city.");
-        return;
-      }
+  <!-- Category Selection -->
+  <div id="categoryScreen" class="hidden">
+    <h2 id="cityTitle"></h2>
+    <div class="card" onclick="showDetails('food')">🍕 Food</div>
+    <div class="card" onclick="showDetails('travel')">🧭 Travel</div>
+    <div class="card" onclick="showDetails('hotels')">🏨 Hotels</div>
+    <button class="back-btn" onclick="goBackToCities()">⬅️ Back</button>
+  </div>
 
-      document.getElementById("cityScreen").style.display = "none";
-      document.getElementById("optionsScreen").style.display = "block";
-      document.getElementById("cityTitle").innerText = selectedCity + " - Choose an Option";
+  <!-- Details Screen -->
+  <div id="itemScreen" class="hidden">
+    <h2 id="itemTitle"></h2>
+    <div id="itemList"></div>
+    <button class="back-btn" onclick="goBackToCategories()">⬅️ Back</button>
+  </div>
+</div>
+
+<script>
+  let users = [{ email: 'tourist@guide.com', password: 'tour123', name: 'Default User' }];
+  let selectedCity = '';
+
+  function toggleForm(type) {
+    document.getElementById("loginScreen").classList.toggle("hidden", type !== 'login');
+    document.getElementById("registerScreen").classList.toggle("hidden", type !== 'register');
+  }
+
+  function login() {
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+
+    const found = users.find(user => user.email === email && user.password === password);
+
+    if (found) {
+      document.getElementById("loginScreen").classList.add("hidden");
+      document.getElementById("cityScreen").classList.remove("hidden");
+    } else {
+      alert("Invalid login. Try tourist@guide.com / tour123 or register.");
+    }
+  }
+
+  function register() {
+    const name = document.getElementById("regName").value;
+    const email = document.getElementById("regEmail").value;
+    const password = document.getElementById("regPassword").value;
+
+    if (!name || !email || !password) {
+      alert("Please fill all fields.");
+      return;
     }
 
-    function goBackToCity() {
-      document.getElementById("optionsScreen").style.display = "none";
-      document.getElementById("cityScreen").style.display = "block";
+    const exists = users.find(user => user.email === email);
+    if (exists) {
+      alert("User already exists.");
+    } else {
+      users.push({ name, email, password });
+      alert("Registered successfully! You can now login.");
+      toggleForm('login');
     }
+  }
 
-    function goBackToOptions() {
-      document.getElementById("listScreen").style.display = "none";
-      document.getElementById("optionsScreen").style.display = "block";
-    }
+  function selectCity(city) {
+    selectedCity = city;
+    document.getElementById("cityScreen").classList.add("hidden");
+    document.getElementById("categoryScreen").classList.remove("hidden");
+    document.getElementById("cityTitle").innerText = `${city} - Choose a Category`;
+  }
 
-    function showInfo(type) {
-      const list = document.getElementById("listContent");
-      list.innerHTML = "";
+  function showDetails(type) {
+    const itemTitle = document.getElementById("itemTitle");
+    const itemList = document.getElementById("itemList");
+    itemList.innerHTML = "";
 
-      let items = [];
+    const data = {
+      food: ["Temple Bar", "Guinness Store", "Pizza Max", "Spar"],
+      travel: ["Bray", "Howth", "Sandyford"],
+      hotels: ["Taj Hotel", "Oberoi Hotel", "Moody Hotel"]
+    };
 
-      if (type === "hotels") {
-        document.getElementById("listTitle").innerText = "Hotels in " + selectedCity;
-        items = [
-          { name: "City Grand Hotel", desc: "Modern hotel with sea view", price: "€120/night" },
-          { name: "Comfort Stay", desc: "Budget-friendly with free breakfast", price: "€80/night" }
-        ];
-      } else if (type === "travel") {
-        document.getElementById("listTitle").innerText = "Tourist Spots in " + selectedCity;
-        items = [
-          { name: "Castle Tour", desc: "Historical site with guided tours" },
-          { name: "River Cruise", desc: "Relaxing boat experience around the city" }
-        ];
-      } else if (type === "food") {
-        document.getElementById("listTitle").innerText = "Famous Foods in " + selectedCity;
-        items = [
-          { name: "Fish & Chips", desc: "Classic Irish meal with tartar sauce" },
-          { name: "Boxty", desc: "Traditional Irish potato pancake" }
-        ];
-      }
+    itemTitle.innerText = `${capitalize(type)} in ${selectedCity}`;
+    data[type].forEach(item => {
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerText = item;
+      itemList.appendChild(div);
+    });
 
-      items.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "list-item";
-        div.innerHTML = `<strong>${item.name}</strong><br>${item.desc}${item.price ? `<br><em>${item.price}</em>` : ''}`;
-        list.appendChild(div);
-      });
+    document.getElementById("categoryScreen").classList.add("hidden");
+    document.getElementById("itemScreen").classList.remove("hidden");
+  }
 
-      document.getElementById("optionsScreen").style.display = "none";
-      document.getElementById("listScreen").style.display = "block";
-    }
-  </script>
+  function goBackToCities() {
+    document.getElementById("categoryScreen").classList.add("hidden");
+    document.getElementById("cityScreen").classList.remove("hidden");
+  }
+
+  function goBackToCategories() {
+    document.getElementById("itemScreen").classList.add("hidden");
+    document.getElementById("categoryScreen").classList.remove("hidden");
+  }
+
+  function capitalize(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }
+</script>
+
 </body>
 </html>
-
-
