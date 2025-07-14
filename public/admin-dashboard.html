@@ -1,0 +1,109 @@
+<h2>Admin Dashboard</h2>
+
+<input type="text" id="cityName" placeholder="New City" />
+<button onclick="addCity()">Add City</button>
+
+<ul id="cityList"></ul>
+
+<script>
+  async function loadCities() {
+    const res = await fetch("/api/cities");
+    const cities = await res.json();
+    const list = document.getElementById("cityList");
+    list.innerHTML = "";
+
+    cities.forEach(city => {
+      const cityId = city.id;
+      const cityBlock = document.createElement("li");
+
+      cityBlock.innerHTML = `
+        <input id="edit-${cityId}" value="${city.name}" />
+        <button onclick="updateCity(${cityId})">Update</button>
+        <button onclick="deleteCity(${cityId})">Delete</button>
+
+        <div style="margin-top: 10px;">
+          <b>Add Category Items for ${city.name}</b><br/>
+          <select id="cat-type-${cityId}">
+            <option value="hotel">Hotel</option>
+            <option value="food">Food</option>
+            <option value="places">Places</option>
+          </select>
+          <input type="text" id="cat-name-${cityId}" placeholder="Enter item name" />
+          <button onclick="addCategory(${cityId})">Add</button>
+          <ul id="cat-list-${cityId}"></ul>
+        </div>
+      `;
+
+      list.appendChild(cityBlock);
+      loadCategories(cityId, "hotel");
+      loadCategories(cityId, "food");
+      loadCategories(cityId, "places");
+    });
+  }
+
+  async function addCity() {
+    const name = document.getElementById("cityName").value.trim();
+    if (!name) return;
+
+    await fetch("/api/cities", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name })
+    });
+
+    document.getElementById("cityName").value = "";
+    loadCities();
+  }
+
+  async function updateCity(id) {
+    const name = document.getElementById(`edit-${id}`).value.trim();
+    if (!name) return;
+
+    await fetch(`/api/cities/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name })
+    });
+
+    loadCities();
+  }
+
+  async function deleteCity(id) {
+    await fetch(`/api/cities/${id}`, { method: "DELETE" });
+    loadCities();
+  }
+
+  async function addCategory(cityId) {
+    const type = document.getElementById(`cat-type-${cityId}`).value;
+    const name = document.getElementById(`cat-name-${cityId}`).value.trim();
+    if (!name) return;
+
+    await fetch(`/api/cities/${cityId}/categories/${type}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name })
+    });
+
+    document.getElementById(`cat-name-${cityId}`).value = "";
+    loadCategories(cityId, type);
+  }
+
+  async function loadCategories(cityId, type) {
+    const res = await fetch(`/api/cities/${cityId}/categories/${type}`);
+    const items = await res.json();
+
+    const list = document.getElementById(`cat-list-${cityId}`);
+    const title = type.charAt(0).toUpperCase() + type.slice(1);
+
+    // remove old list of this type
+    const existing = list.querySelector(`li.cat-${type}`);
+    if (existing) existing.remove();
+
+    const li = document.createElement("li");
+    li.className = `cat-${type}`;
+    li.innerHTML = `<b>${title}</b>: ${items.join(", ") || "No items yet"}`;
+    list.appendChild(li);
+  }
+
+  loadCities();
+</script>
