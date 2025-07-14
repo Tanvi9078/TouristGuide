@@ -13,7 +13,8 @@
       li.innerHTML = `<b>${city.name}</b><ul id="categories-${city.id}"></ul>`;
       list.appendChild(li);
 
-            for (const type of ["hotel", "food", "places"]) {
+      //  categories
+      for (const type of ["hotel", "food", "places"]) {
         const res = await fetch(`/api/cities/${city.id}/categories/${type}`);
         const items = await res.json();
         const sublist = document.createElement("li");
