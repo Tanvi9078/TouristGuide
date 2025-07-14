@@ -7,9 +7,6 @@ const db = mysql.createConnection({
   database: 'tourist_app'
 });
 
-db.connect((err) => {
-  if (err) throw err;
-  console.log('MySQL connected.');
-});
+
 
 module.exports = db;
