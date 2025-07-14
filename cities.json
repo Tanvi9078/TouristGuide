@@ -1,0 +1,75 @@
+[
+  {
+    "id": 1752522592807,
+    "name": "Galway",
+    "categories": {
+      "hotel": [
+        "Dublin Inn",
+        "SeaView"
+      ],
+      "food": [
+        "Pizza Max",
+        "Four Star",
+        "temple bar"
+      ],
+      "places": [
+        "Bray beach",
+        "kilkenny beach"
+      ]
+    }
+  },
+  {
+    "id": 1752524525191,
+    "name": "Dublin",
+    "categories": {
+      "hotel": [
+        "Taj",
+        "Moody"
+      ],
+      "food": [
+        "Fish n Chips",
+        "Burgers"
+      ],
+      "places": [
+        "Howth",
+        "Bray"
+      ]
+    }
+  },
+  {
+    "id": 1752524530689,
+    "name": "Cork",
+    "categories": {
+      "hotel": [
+        "Hotel Cork view",
+        "titanic"
+      ],
+      "food": [
+        "Pizza",
+        "Rice bowl"
+      ],
+      "places": [
+        "sandyford",
+        "spire"
+      ]
+    }
+  },
+  {
+    "id": 1752524544804,
+    "name": "Limerick",
+    "categories": {
+      "hotel": [
+        "homestay",
+        "hostel"
+      ],
+      "food": [
+        "Chicken",
+        "noodles"
+      ],
+      "places": [
+        "pheonix park",
+        "woodland park"
+      ]
+    }
+  }
+]
