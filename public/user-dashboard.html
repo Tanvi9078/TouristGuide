@@ -1,0 +1,30 @@
+<h2>User Dashboard</h2>
+<ul id="cityList"></ul>
+
+<script>
+  async function loadCities() {
+    const res = await fetch("/api/cities");
+    const cities = await res.json();
+    const list = document.getElementById("cityList");
+    list.innerHTML = "";
+
+    for (const city of cities) {
+      const li = document.createElement("li");
+      li.innerHTML = `<b>${city.name}</b><ul id="categories-${city.id}"></ul>`;
+      list.appendChild(li);
+
+            for (const type of ["hotel", "food", "places"]) {
+        const res = await fetch(`/api/cities/${city.id}/categories/${type}`);
+        const items = await res.json();
+        const sublist = document.createElement("li");
+
+        const title = type.charAt(0).toUpperCase() + type.slice(1);
+        sublist.innerHTML = `<strong>${title}:</strong> ${items.length ? items.join(", ") : "No data yet"}`;
+
+        document.getElementById(`categories-${city.id}`).appendChild(sublist);
+      }
+    }
+  }
+
+  loadCities();
+</script>
