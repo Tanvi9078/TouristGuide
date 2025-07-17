@@ -1,6 +1,10 @@
 # Tourist Guide Web App
 This is a simple web application made for people visiting different cities and want some basic information of the city they are visiting.
 
+
+## Word Document Link
+https://mydbs-my.sharepoint.com/:w:/g/personal/20058579_mydbs_ie/EX2TdTX1hLlHjzbZVHPce-ABsIHUF1KlNFsK1BsUfQ4PAQ
+
 ## Features
 
 ## User
