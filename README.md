@@ -39,4 +39,14 @@ npm start
 
 The app will run on: `http://localhost:3000`
 
+## 4.Reference: 
+
+https://stackoverflow.com/  used for syntax error 
+ 
+https://www.geeksforgeeks.org/ for reference 
+ 
+https://www.youtube.com/@CodeWithHarry/featured for coding help
+
+https://chatgpt.com/ for error solving (if not able to do it by self-brainstorming) (no prompts available as incognito tab was used for unlimited prompts) 
+
 
