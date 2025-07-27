@@ -2,8 +2,9 @@
 This is web application for people who wants to visit different different cities and explore nearby travels, foods and hotels with basic information.
 
 
-## Word Document Link
+## Word Doc link
 https://mydbs-my.sharepoint.com/:w:/g/personal/20058579_mydbs_ie/EX2TdTX1hLlHjzbZVHPce-ABsIHUF1KlNFsK1BsUfQ4PAQ
+
 
 
 ## User 
